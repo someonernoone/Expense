@@ -1,5 +1,4 @@
 import { Progress } from "antd"
-import '../css/analytics.css'
 
 const Analytics = ({ data }) => {
 

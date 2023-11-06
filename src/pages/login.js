@@ -3,7 +3,6 @@ import { Button, Form, Input, message } from 'antd';
 import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios"
 
-import '../css/home.css'
 
 const Login = () => {
   const [messageApi, contextHolder] = message.useMessage()
@@ -37,6 +36,7 @@ const Login = () => {
  
   return (
     <div className='login'>
+      
     <Form
       name="basic"
       labelCol={{
@@ -56,6 +56,7 @@ const Login = () => {
       className="container my-2"
     >
       {contextHolder}
+      <h2 style={{"textAlign": "center"}}>LOGIN FORM</h2>
       <Form.Item
         label="Username"
         name="username"
@@ -70,7 +71,9 @@ const Login = () => {
         <Input.Password />
       </Form.Item>
 
-      <Link to="/sign" >I have no account</Link>
+      <div className="center" >
+          <Link to="/sign" >Already Registered ? login here!</Link>
+        </div>
 
       <Form.Item
         wrapperCol={{
@@ -78,10 +81,9 @@ const Login = () => {
           span: 16,
         }}
       >
-        <Button type="primary" htmlType="submit">
-          Submit
+        <Button className="my-1" type="primary" htmlType="submit">
+          LOG IN
         </Button>
-        <button className="btn primary-btn"> Log on</button>
 
       </Form.Item>
     </Form>

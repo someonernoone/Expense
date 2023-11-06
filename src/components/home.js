@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react"
 import { DatePicker, Form, Input, Table, Modal, Select, message} from "antd"
-import { UnorderedListOutlined, AreaChartOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { UnorderedListOutlined, AreaChartOutlined, EditOutlined, DeleteOutlined, FilterOutlined } from '@ant-design/icons'
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import Header from './header'
 import moment from "moment"
 
-import "../css/home.css"
+
 
 import Analytics from "./analytics"
 
@@ -24,6 +24,7 @@ const Home = () => {
     })
   }
 
+  const [filter, setFilter] = useState(false)
   const [data, setData] = useState("")
   const [model, setModel] = useState(false)
   const [token, setToken] = useState("")
@@ -33,8 +34,44 @@ const Home = () => {
   const [viewData, setViewData] = useState("table")
   const [editable, setEditable] = useState(null)
   const [change, setChange] = useState(1);
+  const [width, setWidth] = useState(window.innerWidth)
+  
 
 
+  const expandedRowRender = (record) => {
+    return (
+      <div className='mt-0 p-3 card'>
+        <div className='d-flex justify-content-around'>
+          <div className='left'>
+            <h6>Date</h6> 
+            <h6>Amount</h6>
+            <h6>Type</h6>
+            <h6>Category</h6>
+            <h6>Description</h6>
+            <h6>Reference</h6>
+          </div>
+          <div className='middle'>
+            <h6>:</h6>
+            <h6>:</h6>
+            <h6>:</h6>
+            <h6>:</h6>
+            <h6>:</h6>
+            <h6>:</h6>
+          </div>
+          <div className='right'>
+            <div> {moment(record.date).format("DD-MM-YYYY")} </div>
+            <div> {record.amount } </div>
+            <div> {record.type } </div>
+            <div> { record.category } </div>
+            <div> {record.description  } </div>
+            <div> {record.reference } </div>
+            
+          </div>
+        </div>
+
+      </div>
+    )
+  }
 
   const nevigate = useNavigate()
 
@@ -46,6 +83,37 @@ const Home = () => {
       
     }
   }
+
+  const column= [
+    {
+      "title": "Date",
+      "dataIndex": "date",
+      "render": (text) => <span>{moment(text).format("YYYY-MM-DD")}</span>
+    },
+    {
+      "title": "Amount",
+      "dataIndex": "amount",
+    },
+    {
+      "title": "Type",
+      "dataIndex": "type",
+    },
+    {
+      "title": "Actions",
+      "render": (text, record) => (
+        <div>
+          <EditOutlined style={{'marginRight': '5px'}} onClick={() => {
+            record.date = moment(record.date).format("YYYY-MM-DD");
+            setEditable(record)
+            setModel(true)
+          }} />
+          <DeleteOutlined onClick={() => {
+            deleteData(record)
+          }} />
+        </div>
+      )
+    }
+  ]
 
   const columns = [
     {
@@ -111,6 +179,8 @@ const Home = () => {
 
   useEffect(() => {
     const dat = async () => {
+      setWidth(window.innerWidth)
+      
       let toko = JSON.parse(localStorage.getItem('user'))
       if (!toko) {
         return nevigate('/login')
@@ -166,13 +236,16 @@ const Home = () => {
             <Input />
           </Form.Item>
           <button className="btn " onClick={() => setModel(false)}>Cancel</button>
-          <button type="submit" className="btn primary-btn">Add</button>
+          <button type="submit" className="btn primary-btn">Add New </button>
         </Form>
       </Modal>
-      <div className="box my-2">
-        <div className="filters my-3">
+      {width && width > 600 ? 
+        (
+          <div className="box my-2">
+        <div className="filters-modal my-3">
           <div className="frequency">
-            <Select className='select-opt m-2' value={frequency} onChange={(value) => setFrequency(value)}>
+            <h6>Select Frequency</h6>
+            <Select className='select-opt m-2' style={{minWidth: 130}} value={frequency} onChange={(value) => setFrequency(value)}>
               <Select.Option value="7">Last 5 days</Select.Option>
               <Select.Option value="30">Last 30 days</Select.Option>
               <Select.Option value="365">Last 365 days</Select.Option>
@@ -183,7 +256,8 @@ const Home = () => {
             )}
           </div>
           <div className='type'>
-            <Select className="select-opt" value={type} onChange={(value) => setType(value)}>
+            <h6>Select Type</h6>
+            <Select style={{width: 110}} value={type} onChange={(value) => setType(value)}>
               <Select.Option value='all'>All</Select.Option>
               <Select.Option value='income'>Income</Select.Option>
               <Select.Option value='expense'>Expensive</Select.Option>
@@ -195,11 +269,54 @@ const Home = () => {
           </div>
           <button className="btn btn-primary" onClick={() => { setModel(!model) }}>Add</button>
           </div>
-        </div>
+        </div>) : 
+        (<div className='filter-logo mx-2'>
+          
+          <button type="button" className=" btn btn-primary" style={{ "margin": "20px auto","float":"right",}} onClick={() => setModel(true)}>Add New</button>
+      <div className='filter'>
+        <FilterOutlined style={{"fontSize": "2rem"}} onClick={() => setFilter(true) }/>
+      </div>
+          <Modal title="Filters" open={filter} onCancel={() => { setFilter(false) }} footer={false}>
+          <div style={{"margin" : "20px 0"}}  className="frequency">
+            <h6>Select Frequency</h6>
+            <Select className='select-opt ' value={frequency} style={{"width": "100%"}} onChange={(value) => setFrequency(value)}>
+              <Select.Option value="7">Last 5 days</Select.Option>
+              <Select.Option value="30">Last 30 days</Select.Option>
+              <Select.Option value="365">Last 365 days</Select.Option>
+              <Select.Option value="custom">Custom</Select.Option>
+            </Select>
+            {frequency === "custom" && (
+              <RangePicker className='my-2' value={selectDate} onChange={(value) => setSelectDate(value)} />
+            )}
+          </div>
+          <div style={{"margin": "10px 0"}} className='type'>
+            <h6>Select Type</h6>
+            <Select style={{"width": "100%"}} value={type} onChange={(value) => setType(value)}>
+              <Select.Option value='all'>All</Select.Option>
+              <Select.Option value='income'>Income</Select.Option>
+              <Select.Option value='expense'>Expensive</Select.Option>
+            </Select>
+          </div>
+            <div className='my-6'>
+              <h6>Set View Data</h6>
+          <div className='change-icon'>
+            <UnorderedListOutlined className={`${viewData === 'table' ? 'active-icon' : 'inactive-icon'} btn`} onClick={() => setViewData('table')} />
+            <AreaChartOutlined className={`${viewData === 'analytics' ? 'active-icon' : 'inactive-icon'} btn`} onClick={() => setViewData('analytics')} />
+          </div>
+              </div>
+
+            <button style={{'width':'100%'}} className='my-2 btn btn-primary' onClick={() => setFilter(false)} >Ok</button>
+          </Modal>
+          </div>)
+      }
           <div className='content'>
-            {viewData === 'table' ? (
-              <Table dataSource={data} columns={columns} />
-            ) : (
+            {viewData === 'table' ? ( width && width > 600 ? (
+      <Table dataSource={data} columns={columns} />
+            ) :(
+      <Table dataSource={data} columns={column} expandable={{ expandedRowRender, defaultExpandedRowKeys: ['0'] }} />
+      
+              
+            )): (
               <Analytics data={data} />
             )}
           </div>
