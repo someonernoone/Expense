@@ -24,7 +24,7 @@ const Sign = () => {
       return messageSend("error", 'Please fill all fields' )
     }
     try {
-      const res = await axios.post("https://expensive-api.sciencetechnolo.repl.co/api/v1/sign", values)
+      const res = await axios.post("/api/v1/sign", values)
       messageSend("success", "Sign- in successfully")
       localStorage.setItem("user", JSON.stringify(res.data.user.username));
       nevigate(`/`)

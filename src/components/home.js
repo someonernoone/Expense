@@ -40,7 +40,7 @@ const Home = () => {
 
   const deleteData = async (record) => {
     try {
-      await axios.post(`https://expensive-api.sciencetechnolo.repl.co/api/v1/${token}/deleteTrans`, { id: record._id })
+      await axios.post(`/api/v1/${token}/deleteTrans`, { id: record._id })
       setChange(change + 1)
     } catch (error) {
       
@@ -94,13 +94,13 @@ const Home = () => {
     }
     try {
       if (editable) {
-       await axios.post(`https://expensive-api.sciencetechnolo.repl.co/api/v1/${token}/updateTrans`, { id: editable._id, values })
+       await axios.post(`/api/v1/${token}/updateTrans`, { id: editable._id, values })
         setChange(change + 1)
         
         setEditable(null)
       }
       else {
-        await axios.post(`https://expensive-api.sciencetechnolo.repl.co/api/v1/${token}/addTrans`, values)
+        await axios.post(`/api/v1/${token}/addTrans`, values)
         setChange(change + 1)
       }
     } catch (error) {
@@ -118,7 +118,7 @@ const Home = () => {
       
       setToken(toko)
       try {
-        const res = await axios.post(`https://expensive-api.sciencetechnolo.repl.co/api/v1/${toko}/getTrans`, { frequency, selectDate, type })
+        const res = await axios.post(`/api/v1/${toko}/getTrans`, { frequency, selectDate, type })
         res.data.data.map((data) => data.key = data._id)
         setData(res.data.data)
       } catch (error) {
