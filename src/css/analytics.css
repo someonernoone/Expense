@@ -1,0 +1,17 @@
+.flex-anal{
+  display: flex;
+  justify-content: space-between;
+}
+
+.card{
+  margin: 5px 10px;
+}
+
+@media screen and (max-width: 600){
+  .flex-anal{
+    flex-direction: column;
+  }
+  .card{
+    margin: 5px 2px;
+  }
+}

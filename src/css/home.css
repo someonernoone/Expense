@@ -1,0 +1,64 @@
+.filters{
+  width: 99%;
+  
+  padding: 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.type Select{
+  padding: 5px 50px;
+}
+
+.select-opt{
+  margin: 0px !important;
+}
+
+.frequency{
+  
+}
+
+.change-icon{
+  border: 1px solid black;
+  padding: 0px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.box{
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.active-icon{
+  color: rgba(0,0,0,1);
+}
+
+.inactive-icon{
+  color: rgba(0,0,0,0.9);
+}
+
+/* login */
+
+.login{
+  padding: 10px;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: aliceblue;
+}
+
+.login Form{
+  background: white;
+  max-width: 500px;
+}
+
+
+
