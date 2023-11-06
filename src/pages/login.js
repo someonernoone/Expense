@@ -1,4 +1,4 @@
-import  React from 'react';
+import  React, { useEffect } from 'react';
 import { Button, Form, Input, message } from 'antd';
 import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios"
@@ -33,6 +33,12 @@ const Login = () => {
     
     }
   };
+
+  useEffect(() => {
+    if(JSON.parse(localStorage.getItem('user'))){
+      nevigate('/')
+    }
+  },[nevigate])
  
   return (
     <div className='login'>

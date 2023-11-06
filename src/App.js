@@ -3,14 +3,17 @@ import './App.css';
 
 import {
   createBrowserRouter,
-  RouterProvider,
+  RouterProvider
 } from "react-router-dom";
 
 import Sign from './pages/sign'
 import Login from './pages/login'
 import Home from './components/home'
+import Not from "./pages/not"
+
 
 function App() {
+  
 
   const router = createBrowserRouter([
     {
@@ -35,6 +38,12 @@ function App() {
         <Sign />
       ),
     },
+    {
+      path: "*",
+      element: (
+        <Not />
+      )
+    }
   ]);
 
 

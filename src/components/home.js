@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { DatePicker, Form, Input, Table, Modal, Select, message} from "antd"
+import { DatePicker, Form, Input, Table, Modal, Select, message } from "antd"
 import { UnorderedListOutlined, AreaChartOutlined, EditOutlined, DeleteOutlined, FilterOutlined } from '@ant-design/icons'
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
@@ -35,7 +35,7 @@ const Home = () => {
   const [editable, setEditable] = useState(null)
   const [change, setChange] = useState(1);
   const [width, setWidth] = useState(window.innerWidth)
-  
+
 
 
   const expandedRowRender = (record) => {
@@ -43,7 +43,7 @@ const Home = () => {
       <div className='mt-0 p-3 card'>
         <div className='d-flex justify-content-around'>
           <div className='left'>
-            <h6>Date</h6> 
+            <h6>Date</h6>
             <h6>Amount</h6>
             <h6>Type</h6>
             <h6>Category</h6>
@@ -60,12 +60,12 @@ const Home = () => {
           </div>
           <div className='right'>
             <div> {moment(record.date).format("DD-MM-YYYY")} </div>
-            <div> {record.amount } </div>
-            <div> {record.type } </div>
-            <div> { record.category } </div>
-            <div> {record.description  } </div>
-            <div> {record.reference } </div>
-            
+            <div> {record.amount} </div>
+            <div> {record.type} </div>
+            <div> {record.category} </div>
+            <div> {record.description} </div>
+            <div> {record.reference} </div>
+
           </div>
         </div>
 
@@ -80,11 +80,11 @@ const Home = () => {
       await axios.post(`/api/v1/${token}/deleteTrans`, { id: record._id })
       setChange(change + 1)
     } catch (error) {
-      
+
     }
   }
 
-  const column= [
+  const column = [
     {
       "title": "Date",
       "dataIndex": "date",
@@ -102,7 +102,7 @@ const Home = () => {
       "title": "Actions",
       "render": (text, record) => (
         <div>
-          <EditOutlined style={{'marginRight': '5px'}} onClick={() => {
+          <EditOutlined style={{ 'marginRight': '5px' }} onClick={() => {
             record.date = moment(record.date).format("YYYY-MM-DD");
             setEditable(record)
             setModel(true)
@@ -143,7 +143,7 @@ const Home = () => {
       "title": "Actions",
       "render": (text, record) => (
         <div>
-          <EditOutlined style={{'marginRight': '5px'}} onClick={() => {
+          <EditOutlined style={{ 'marginRight': '5px' }} onClick={() => {
             record.date = moment(record.date).format("YYYY-MM-DD");
             setEditable(record)
             setModel(true)
@@ -157,14 +157,14 @@ const Home = () => {
   ]
 
   const onFinish = async (values) => {
-    if(!values.amount || !values.type || !values.description || !values.category || !values.date){
+    if (!values.amount || !values.type || !values.description || !values.category || !values.date) {
       return messageSend("error", "Please fill the all fields")
     }
     try {
       if (editable) {
-       await axios.post(`/api/v1/${token}/updateTrans`, { id: editable._id, values })
+        await axios.post(`/api/v1/${token}/updateTrans`, { id: editable._id, values })
         setChange(change + 1)
-        
+
         setEditable(null)
       }
       else {
@@ -172,7 +172,7 @@ const Home = () => {
         setChange(change + 1)
       }
     } catch (error) {
-      
+
     }
     setModel(false)
   }
@@ -180,24 +180,24 @@ const Home = () => {
   useEffect(() => {
     const dat = async () => {
       setWidth(window.innerWidth)
-      
+
       let toko = JSON.parse(localStorage.getItem('user'))
       if (!toko) {
         return nevigate('/login')
       }
-      
+
       setToken(toko)
       try {
         const res = await axios.post(`/api/v1/${toko}/getTrans`, { frequency, selectDate, type })
         res.data.data.map((data) => data.key = data._id)
         setData(res.data.data)
       } catch (error) {
-        
+
       }
     }
     dat()
-    
-    
+
+
   }, [frequency, selectDate, nevigate, type, change])
 
   return (
@@ -239,91 +239,91 @@ const Home = () => {
           <button type="submit" className="btn primary-btn">Add New </button>
         </Form>
       </Modal>
-      {width && width > 600 ? 
+      {width && width > 600 ?
         (
           <div className="box my-2">
-        <div className="filters-modal my-3">
-          <div className="frequency">
-            <h6>Select Frequency</h6>
-            <Select className='select-opt m-2' style={{minWidth: 130}} value={frequency} onChange={(value) => setFrequency(value)}>
-              <Select.Option value="7">Last 5 days</Select.Option>
-              <Select.Option value="30">Last 30 days</Select.Option>
-              <Select.Option value="365">Last 365 days</Select.Option>
-              <Select.Option value="custom">Custom</Select.Option>
-            </Select>
-            {frequency === "custom" && (
-              <RangePicker className='my-2' value={selectDate} onChange={(value) => setSelectDate(value)} />
-            )}
-          </div>
-          <div className='type'>
-            <h6>Select Type</h6>
-            <Select style={{width: 110}} value={type} onChange={(value) => setType(value)}>
-              <Select.Option value='all'>All</Select.Option>
-              <Select.Option value='income'>Income</Select.Option>
-              <Select.Option value='expense'>Expensive</Select.Option>
-            </Select>
-          </div>
-          <div className='change-icon'>
-            <UnorderedListOutlined className={`${viewData === 'table' ? 'active-icon' : 'inactive-icon'} btn`} onClick={() => setViewData('table')} />
-            <AreaChartOutlined className={`${viewData === 'analytics' ? 'active-icon' : 'inactive-icon'} btn`} onClick={() => setViewData('analytics')} />
-          </div>
-          <button className="btn btn-primary" onClick={() => { setModel(!model) }}>Add</button>
-          </div>
-        </div>) : 
+            <div className="filters-modal my-3">
+              <div className="frequency">
+                <h6>Select Frequency</h6>
+                <Select className='select-opt m-2' style={{ minWidth: 130 }} value={frequency} onChange={(value) => setFrequency(value)}>
+                  <Select.Option value="7">Last 5 days</Select.Option>
+                  <Select.Option value="30">Last 30 days</Select.Option>
+                  <Select.Option value="365">Last 365 days</Select.Option>
+                  <Select.Option value="custom">Custom</Select.Option>
+                </Select>
+                {frequency === "custom" && (
+                  <RangePicker className='my-2' value={selectDate} onChange={(value) => setSelectDate(value)} />
+                )}
+              </div>
+              <div className='type'>
+                <h6>Select Type</h6>
+                <Select style={{ width: 110 }} value={type} onChange={(value) => setType(value)}>
+                  <Select.Option value='all'>All</Select.Option>
+                  <Select.Option value='income'>Income</Select.Option>
+                  <Select.Option value='expense'>Expensive</Select.Option>
+                </Select>
+              </div>
+              <div className='change-icon'>
+                <UnorderedListOutlined className={`${viewData === 'table' ? 'active-icon' : 'inactive-icon'} btn`} onClick={() => setViewData('table')} />
+                <AreaChartOutlined className={`${viewData === 'analytics' ? 'active-icon' : 'inactive-icon'} btn`} onClick={() => setViewData('analytics')} />
+              </div>
+              <button className="btn btn-primary" onClick={() => { setModel(!model) }}>Add</button>
+            </div>
+          </div>) :
         (<div className='filter-logo mx-2'>
-          
-          <button type="button" className=" btn btn-primary" style={{ "margin": "20px auto","float":"right",}} onClick={() => setModel(true)}>Add New</button>
-      <div className='filter'>
-        <FilterOutlined style={{"fontSize": "2rem"}} onClick={() => setFilter(true) }/>
-      </div>
+
+          <button type="button" className=" btn btn-primary" style={{ "margin": "20px auto", "float": "right", }} onClick={() => setModel(true)}>Add New</button>
+          <div className='filter'>
+            <FilterOutlined style={{ "fontSize": "2rem" }} onClick={() => setFilter(true)} />
+          </div>
           <Modal title="Filters" open={filter} onCancel={() => { setFilter(false) }} footer={false}>
-          <div style={{"margin" : "20px 0"}}  className="frequency">
-            <h6>Select Frequency</h6>
-            <Select className='select-opt ' value={frequency} style={{"width": "100%"}} onChange={(value) => setFrequency(value)}>
-              <Select.Option value="7">Last 5 days</Select.Option>
-              <Select.Option value="30">Last 30 days</Select.Option>
-              <Select.Option value="365">Last 365 days</Select.Option>
-              <Select.Option value="custom">Custom</Select.Option>
-            </Select>
-            {frequency === "custom" && (
-              <RangePicker className='my-2' value={selectDate} onChange={(value) => setSelectDate(value)} />
-            )}
-          </div>
-          <div style={{"margin": "10px 0"}} className='type'>
-            <h6>Select Type</h6>
-            <Select style={{"width": "100%"}} value={type} onChange={(value) => setType(value)}>
-              <Select.Option value='all'>All</Select.Option>
-              <Select.Option value='income'>Income</Select.Option>
-              <Select.Option value='expense'>Expensive</Select.Option>
-            </Select>
-          </div>
+            <div style={{ "margin": "20px 0" }} className="frequency">
+              <h6>Select Frequency</h6>
+              <Select className='select-opt ' value={frequency} style={{ "width": "100%" }} onChange={(value) => setFrequency(value)}>
+                <Select.Option value="7">Last 5 days</Select.Option>
+                <Select.Option value="30">Last 30 days</Select.Option>
+                <Select.Option value="365">Last 365 days</Select.Option>
+                <Select.Option value="custom">Custom</Select.Option>
+              </Select>
+              {frequency === "custom" && (
+                <RangePicker className='my-2' value={selectDate} onChange={(value) => setSelectDate(value)} />
+              )}
+            </div>
+            <div style={{ "margin": "10px 0" }} className='type'>
+              <h6>Select Type</h6>
+              <Select style={{ "width": "100%" }} value={type} onChange={(value) => setType(value)}>
+                <Select.Option value='all'>All</Select.Option>
+                <Select.Option value='income'>Income</Select.Option>
+                <Select.Option value='expense'>Expensive</Select.Option>
+              </Select>
+            </div>
             <div className='my-6'>
               <h6>Set View Data</h6>
-          <div className='change-icon'>
-            <UnorderedListOutlined className={`${viewData === 'table' ? 'active-icon' : 'inactive-icon'} btn`} onClick={() => setViewData('table')} />
-            <AreaChartOutlined className={`${viewData === 'analytics' ? 'active-icon' : 'inactive-icon'} btn`} onClick={() => setViewData('analytics')} />
-          </div>
+              <div className='change-icon'>
+                <UnorderedListOutlined className={`${viewData === 'table' ? 'active-icon' : 'inactive-icon'} btn`} onClick={() => setViewData('table')} />
+                <AreaChartOutlined className={`${viewData === 'analytics' ? 'active-icon' : 'inactive-icon'} btn`} onClick={() => setViewData('analytics')} />
               </div>
+            </div>
 
-            <button style={{'width':'100%'}} className='my-2 btn btn-primary' onClick={() => setFilter(false)} >Ok</button>
+            <button style={{ 'width': '100%' }} className='my-2 btn btn-primary' onClick={() => setFilter(false)} >Ok</button>
           </Modal>
-          </div>)
+        </div>)
       }
-          <div className='content'>
-            {viewData === 'table' ? ( width && width > 600 ? (
-      <Table dataSource={data} columns={columns} />
-            ) :(
-      <Table dataSource={data} columns={column} expandable={{ expandedRowRender, defaultExpandedRowKeys: ['0'] }} />
-      
-              
-            )): (
-              <Analytics data={data} />
-            )}
-          </div>
-        
-        
-      </>
-    )
+      <div className='content'>
+        {viewData === 'table' ? (width && width > 600 ? (
+          <Table dataSource={data} columns={columns} />
+        ) : (
+          <Table dataSource={data} columns={column} expandable={{ expandedRowRender, defaultExpandedRowKeys: ['0'] }} />
+
+
+        )) : (
+          <Analytics data={data} />
+        )}
+      </div>
+
+
+    </>
+  )
 }
 
 export default Home;

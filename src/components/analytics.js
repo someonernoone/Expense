@@ -48,9 +48,9 @@ const Analytics = ({ data }) => {
             })}
           </div>
         </div>
-              <div className='card'>
-        <div className="card-header">Total Expenses category</div>
-        <div className='card-body'>
+        <div className='card'>
+          <div className="card-header">Total Expenses category</div>
+          <div className='card-body'>
             {categories.map(category => {
               const categoryTransaction = data.filter(transaction => transaction.type === 'expense' && transaction.category === category).reduce((acc, transaction) => acc + transaction.amount, 0)
               return (

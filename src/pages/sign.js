@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Form, Input, message } from 'antd';
 import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios"
@@ -19,6 +19,7 @@ const Sign = () => {
     })
   }
 
+
   const onFinish = async (values) => {
     if (!values.username || !values.password || !values.email || !values.name) {
       return messageSend("error", 'Please fill all fields')
@@ -34,6 +35,13 @@ const Sign = () => {
 
     }
   };
+
+  useEffect(() => {
+    if(JSON.parse(localStorage.getItem('user'))){
+      nevigate('/')
+    }
+  },[nevigate])
+  
   return (
     <div className="login">
 
